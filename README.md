@@ -8,6 +8,8 @@ The objective of this tutorial was to understand how to manage state in Flutter.
 
 A todolist app to keep track of tasks.
 
+![Finished App](https://github.com/raymondallen/todo/blob/master/todo-demo.gif)
+
 ## Learning Objectives
 
 - Understand what is state and why we need to manage it.
@@ -20,5 +22,12 @@ A todolist app to keep track of tasks.
 - Learn to lift state up to be able to access it from children widgets.
 - Learn about design patterns and why they are useful.
 - Understand how the Provider package works and use it to manage app state.
+
+## Customisations
+
+- Styling changes
+- Used slide action to reveal delete task option instead of long press
+- Added button to clear all tasks
+- Confirmation dialog added to clear all option
 
 >This is a companion project to The App Brewery's Complete Flutter Development Bootcamp, check out the full course at [www.appbrewery.co](https://www.appbrewery.co/)

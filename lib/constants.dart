@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 const kAppTitle = TextStyle(
@@ -12,9 +14,15 @@ const kTaskCountStyle = TextStyle(
   color: Colors.white,
 );
 
-const kListItemStyle = TextStyle(
+const kTaskIncompleteStyle = TextStyle(
   fontSize: 14.0,
   color: Colors.black,
+);
+
+const kTaskCompleteStyle = TextStyle(
+  fontSize: 14.0,
+  color: Colors.black,
+  decoration: TextDecoration.lineThrough,
 );
 
 const kAddTaskTextFieldDecoration = InputDecoration(

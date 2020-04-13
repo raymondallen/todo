@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:todo/constants.dart';
 
 class AddTaskForm extends StatefulWidget {
+  final Function onPressed;
+  AddTaskForm({this.onPressed});
+
   @override
   _AddTaskFormState createState() => _AddTaskFormState();
 }
@@ -9,10 +12,10 @@ class AddTaskForm extends StatefulWidget {
 class _AddTaskFormState extends State<AddTaskForm> {
   final TextEditingController _textController = TextEditingController();
 
+  String newTask;
+
   @override
   Widget build(BuildContext context) {
-    String newTask;
-
     return Container(
       color: Color(0xff757575),
       child: Container(
@@ -43,7 +46,9 @@ class _AddTaskFormState extends State<AddTaskForm> {
                 ),
               ),
               color: Colors.deepOrange,
-              onPressed: () {},
+              onPressed: () {
+                this.widget.onPressed(newTask);
+              },
             ),
           ],
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo/constants.dart';
-import 'package:todo/models/task.dart';
+import 'package:todo/models/task_repository.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskList extends StatefulWidget {
   @override
@@ -8,74 +10,61 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  List<Task> tasks = [
-    Task(
-      name: 'Buy groceries',
-    ),
-    Task(name: 'Take rubbish out'),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: Colors.white,
-        child: ListView.builder(
-          padding: EdgeInsets.all(8.0),
-          itemCount: tasks.length,
-          itemBuilder: (context, index) {
-            return TaskTile(
-              title: tasks[index].name,
-              checked: tasks[index].isComplete,
-              toggleCheckboxState: (bool value) {
-                setState(() {
-                  tasks[index].isComplete = value;
-                });
-              },
-            );
-          },
+    return Consumer<TaskRepository>(builder: (context, taskRepository, child) {
+      return Expanded(
+        child: Container(
+          color: Colors.white,
+          child: ListView.builder(
+            padding: EdgeInsets.all(8.0),
+            itemCount: taskRepository.taskCount,
+            itemBuilder: (context, index) {
+              final task = taskRepository.tasks[index];
+              return Slidable(
+                actionPane: SlidableDrawerActionPane(),
+                actionExtentRatio: 0.25,
+                child: TaskTile(
+                  name: task.name,
+                  checked: task.isComplete,
+                  onChanged: (bool value) {
+                    taskRepository.toggleComplete(index);
+                  },
+                ),
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    foregroundColor: Colors.deepOrange,
+                    caption: 'Delete',
+                    icon: Icons.delete,
+                    onTap: () => taskRepository.delete(index),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
-class TaskTile extends StatefulWidget {
-  const TaskTile({
-    Key key,
-    @required this.title,
-    @required this.checked,
-    @required this.toggleCheckboxState,
-  }) : super(key: key);
-
-  final String title;
+class TaskTile extends StatelessWidget {
+  final String name;
   final bool checked;
-  final Function toggleCheckboxState;
+  final Function onChanged;
 
-  @override
-  _TaskTileState createState() => _TaskTileState();
-}
-
-class _TaskTileState extends State<TaskTile> {
-  bool isChecked = false;
-
-  @override
-  void initState() {
-    isChecked = this.widget.checked;
-    super.initState();
-  }
+  TaskTile({this.name, this.checked, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
       title: Text(
-        widget.title,
-        style: kListItemStyle,
+        this.name,
+        style: this.checked == true ? kTaskCompleteStyle : kTaskIncompleteStyle,
       ),
-      value: isChecked,
+      value: this.checked,
       onChanged: (bool value) {
-        isChecked = value;
-        widget.toggleCheckboxState(value);
+        this.onChanged(value);
       },
       activeColor: Colors.deepOrange,
     );
